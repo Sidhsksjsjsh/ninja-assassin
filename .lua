@@ -30,8 +30,8 @@ end]]
 
 local function wallbang(pos)
     local ray = Ray.new(user.Character.HumanoidRootPart.Position,(pos - user.Character.HumanoidRootPart.Position).unit * 500)
-    local hitPart,hitPosition = workspace:FindPartOnRay(ray,workspace,false,true)
-    if hitPart and hitPart:IsA("BasePart") or hitPart:IsA("Part") then
+    local hitPart,hitPosition = workspace:FindPartOnRay(ray,workspace,true,true)
+    if hitPart then
         shoot(hitPosition)
     end
 end
