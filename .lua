@@ -2,6 +2,7 @@ local Library =
 loadstring(Game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 local Window_1 = Library:NewWindow("Beta Turtle Hub UI")
 local user = game:GetService("Players").LocalPlayer
+local workspace = game:GetService("Workspace")
 
 local Tab1 = Window_1:NewSection("Main")
 local Tab2 = Window_1:NewSection("Bullet settings")
@@ -16,9 +17,20 @@ local function shoot(position)
     game:GetService("Players")["LocalPlayer"]["Character"]["Shuriken"]["HitEvent"]:FireServer(position)
 end
 
-local function detectWallAndShoot()
-    local ray = Ray.new(user.Character.Head.Position,user.Character.Head.CFrame.LookVector * 500)
-    local hitPart, hitPosition = game.Workspace:FindPartOnRay(ray,user.Character,false,true)
+--[[local function wallbang()
+  local player = game.Players.LocalPlayer
+    if player then
+        local ray = Ray.new(user.Character.HumanoidRootPart.Position,(position - user.Character.HumanoidRootPart.Position).unit * 500)
+        local hitPart, hitPosition = workspace:FindPartOnRay(ray,workspace,false,true)
+        if hitPart and hitPart.Name == "Wall" then
+            -- Peluru menembus dinding, lakukan sesuatu di sini
+        end
+  end
+end]]
+
+local function wallbang(pos)
+    local ray = Ray.new(user.Character.HumanoidRootPart.Position,(pos - user.Character.HumanoidRootPart.Position).unit * 500)
+    local hitPart,hitPosition = workspace:FindPartOnRay(ray,workspace,false,true)
     if hitPart and hitPart:IsA("BasePart") or hitPart:IsA("Part") then
         shoot(hitPosition)
     end
@@ -41,7 +53,9 @@ Tab1:CreateToggle("Auto spam shuriken",function(value)
     while wait() do
       if _G.sshu == false then break end
       playerInst(function(i,v)
-          if _G.wallb == false then
+          if _G.wallb == true then
+            wallbang(v.Position)
+          else
             shoot(v.Position)
           end
       end)
